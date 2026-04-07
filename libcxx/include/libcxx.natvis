@@ -1,0 +1,197 @@
+<?xml version="1.0" encoding="utf-8"?>
+<AutoVisualizer xmlns="http://schemas.microsoft.com/vstudio/debugger/natvis/2010">
+	<Type Name="std::__1::pair&lt;*,*&gt;">
+		<DisplayString IncludeView="noparens">{first}, {second}</DisplayString>
+		<DisplayString ExcludeView="noparens">({first}, {second})</DisplayString>
+		<Expand>
+			<Item Name="first">first</Item>
+			<Item Name="second">second</Item>
+		</Expand>
+	</Type>
+	<Type Name="std::__1::pair&lt;*,*&gt;" IncludeView="maphelper"><!-- This can not be nammed `map_helper' because unknown reason. -->
+		<DisplayString>{second}</DisplayString>
+	</Type>
+	<Type Name="std::__1::span&lt;*&gt;">
+		<Intrinsic Name="data" Expression="__data_"/>
+		<Intrinsic Name="size" Expression="__size_"/>
+		<DisplayString>{{ size={size()} }}</DisplayString>
+		<Expand>
+			<ArrayItems>
+				<Size>size()</Size>
+				<ValuePointer>data()</ValuePointer>
+			</ArrayItems>
+		</Expand>
+	</Type>
+	<Type Name="std::__1::complex&lt;*&gt;">
+		<DisplayString Condition="(__im_ &lt; 0) &amp;&amp; (__re_ == 0)">-i*{-__im_}</DisplayString>
+		<DisplayString Condition="(__im_ &lt; 0) &amp;&amp; (__re_ != 0)">{__re_}-i*{-__im_}</DisplayString>
+		<DisplayString Condition="__im_ == 0">{__re_}</DisplayString>
+		<DisplayString Condition="(__im_ &gt; 0) &amp;&amp; (__re_ == 0)">i*{__im_}</DisplayString>
+		<DisplayString Condition="(__im_ &gt; 0) &amp;&amp; (__re_ != 0)">{__re_}+i*{__im_}</DisplayString>
+		<Expand>
+			<Item Name="real">__re_</Item>
+			<Item Name="imag">__im_</Item>
+		</Expand>
+	</Type>
+	<Type Name="std::__1::array&lt;*,*&gt;">
+		<DisplayString>{{ size={$T2} }}</DisplayString>
+		<Expand>
+			<ArrayItems>
+				<Size>$T2</Size>
+				<ValuePointer>&amp;__elems_[0]</ValuePointer>
+			</ArrayItems>
+		</Expand>
+	</Type>
+	<Type Name="std::__1::once_flag">
+		<DisplayString Condition="__state_ == 0">unset</DisplayString>
+		<DisplayString Condition="__state_ == 1">pending</DisplayString>
+		<DisplayString Condition="__state_ == ~((_State_type)(0))">complete</DisplayString>
+	</Type>
+	<Type Name="std::__1::__wrap_iter&lt;*&gt;">
+		<DisplayString>{*__i_}</DisplayString>
+		<Expand>
+			<Item Name="[ptr]">__i_</Item>
+		</Expand>
+	</Type>
+	<!-- todo vector<bool> -->
+	<Type Name="std::__1::vector&lt;*&gt;">
+		<Intrinsic Name="allocator" Expression="__alloc_"/>
+		<Intrinsic Name="capacity" Expression="(size_t)(__cap_ - __begin_)"/>
+		<Intrinsic Name="data" Expression="__begin_"/>
+		<Intrinsic Name="size" Expression="(size_t)(__end_ - __begin_)"/>
+		<DisplayString>{{ size={size()} }}</DisplayString>
+		<Expand>
+			<Item Name="[capacity]" ExcludeView="simple">capacity()</Item>
+			<Item Name="[allocator]" ExcludeView="simple">allocator()</Item>
+			<ArrayItems>
+				<Size>size()</Size>
+				<ValuePointer>data()</ValuePointer>
+			</ArrayItems>
+		</Expand>
+	</Type>
+	<Type Name="std::__1::vector&gt;char,*&lt;">
+		<AlternativeType Name="std::__1::vector&lt;char,*&gt;"/>
+		<AlternativeType Name="std::__1::vector&lt;wchar_t,*&gt;"/>
+		<AlternativeType Name="std::__1::vector&lt;char8_t,*&gt;"/>
+		<AlternativeType Name="std::__1::vector&lt;char16_t,*&gt;"/>
+		<AlternativeType Name="std::__1::vector&lt;char32_t,*&gt;"/>
+		<Intrinsic Name="allocator" Expression="__alloc_"/>
+		<Intrinsic Name="capacity" Expression="(size_t)(__cap_ - __begin_)"/>
+		<Intrinsic Name="data" Expression="__begin_"/>
+		<Intrinsic Name="size" Expression="(size_t)(__end_ - __begin_)"/>
+		<DisplayString Condition="size() == 0">{{empty}}</DisplayString>
+		<DisplayString Condition="size() &gt; 0">{data(),[size()]na}</DisplayString>
+		<Expand>
+			<Item Name="[size]" ExcludeView="simple">size()</Item>
+			<Item Name="[capacity]" ExcludeView="simple">capacity()</Item>
+			<Item Name="[allocator]" ExcludeView="simple">allocator()</Item>
+			<ArrayItems>
+				<Size>size()</Size>
+				<ValuePointer>data()</ValuePointer>
+			</ArrayItems>
+		</Expand>
+	</Type>
+	<Type Name="std::__1::basic_string&lt;*&gt;">
+		<Intrinsic Name="is_big" Expression="__rep_.__l.__is_long_"/>
+		<Intrinsic Name="is_sml" Expression="!is_big()"/>
+		<Intrinsic Name="size" Expression="((is_sml()) ? (__rep_.__s.__size_) : (__rep_.__l.__size_))"/>
+		<Intrinsic Name="capacity" Expression="(((is_sml()) ? (__min_cap) : (__rep_.__l.__cap_ * __endian_factor)) - 1)"/>
+		<Intrinsic Name="data" Expression="((is_sml()) ? (&amp;__rep_.__s.__data_[0]) : (__rep_.__l.__data_))"/>
+		<Intrinsic Name="allocator" Expression="__alloc_"/>
+		<DisplayString>{data(),na}</DisplayString>
+		<StringView>data(),na</StringView>
+		<Expand>
+			<Item Name="[size]" ExcludeView="simple">size()</Item>
+			<Item Name="[capacity]" ExcludeView="simple">capacity()</Item>
+			<Item Name="[allocator]" ExcludeView="simple">allocator()</Item>
+			<ArrayItems>
+				<Size>size()</Size>
+				<ValuePointer>data()</ValuePointer>
+			</ArrayItems>
+		</Expand>
+	</Type>
+	<Type Name="std::__1::forward_list&lt;*&gt;">
+		<Intrinsic Name="is_empty" Expression="__before_begin_.__next_ == nullptr"/>
+		<DisplayString Condition="is_empty()">empty</DisplayString>
+		<DisplayString Condition="!is_empty()">non-empty</DisplayString>
+		<Expand>
+			<Item Name="[allocator]" ExcludeView="simple">__alloc_</Item>
+			<LinkedListItems>
+				<HeadPointer>__before_begin_.__next_</HeadPointer>
+				<NextPointer>__next_</NextPointer>
+				<ValueNode>__value_</ValueNode>
+			</LinkedListItems>
+		</Expand>
+	</Type>
+	<Type Name="std::__1::__forward_list_node&lt;*,void*&gt;">
+		<DisplayString>{__value_}</DisplayString>
+		<Expand>
+			<Item Name="[next]">__next_</Item>
+			<Item Name="[value]">__value_</Item>
+		</Expand>
+	</Type>
+	<Type Name="std::__1::__forward_list_iterator&lt;std::__1::__forward_list_node&lt;*,void*&gt;*&gt;">
+		<AlternativeType Name="std::__1::__forward_list_const_iterator&lt;std::__1::__forward_list_node&lt;*,void*&gt;*&gt;"/>
+		<DisplayString>{((std::__1::__forward_list_node&lt;$T1,void *&gt;*)(__ptr_))-&gt;__value_}</DisplayString><!-- The space between the void and the star must be there because unknown reason. -->
+		<Expand>
+			<Item Name="[ptr]">*((std::__1::__forward_list_node&lt;$T1,void *&gt;**)(&amp;__ptr_))</Item><!-- The space between the void and the star must be there because unknown reason. -->
+		</Expand>
+	</Type>
+	<!-- todo: generalize this to general "tree" instead of concrete "map" -->
+	<Type Name="std::__1::map&lt;*&gt;">
+		<Intrinsic Name="size" Expression="__tree_.__size_"/>
+		<DisplayString>{{ size={size()} }}</DisplayString>
+		<Expand>
+			<Item Name="[comparator]" ExcludeView="simple">__tree_.__value_comp_.__comp_</Item>
+			<Item Name="[allocator]" ExcludeView="simple">__tree_.__node_alloc_</Item>
+			<TreeItems>
+				<Size>size()</Size>
+				<HeadPointer>((std::__1::__tree_node&lt;std::__1::__value_type&lt;$T1,$T2&gt;,void *&gt;*)(__tree_.__end_node_.__left_))</HeadPointer><!-- The space between the void and the star must be there because unknown reason. -->
+				<LeftPointer>((std::__1::__tree_node&lt;std::__1::__value_type&lt;$T1,$T2&gt;,void *&gt;*)(__left_))</LeftPointer><!-- The space between the void and the star must be there because unknown reason. -->
+				<RightPointer>((std::__1::__tree_node&lt;std::__1::__value_type&lt;$T1,$T2&gt;,void *&gt;*)(__right_))</RightPointer><!-- The space between the void and the star must be there because unknown reason. -->
+				<ValueNode Name="[{__value_.first}]">__value_,view(maphelper)</ValueNode><!-- This can not be nammed `map_helper' because unknown reason. -->
+			</TreeItems>
+		</Expand>
+	</Type>
+	<Type Name="std::__1::__tree_node&lt;std::__1::__value_type&lt;*&gt;,void*&gt;">
+		<DisplayString>{__value_}</DisplayString>
+		<Expand>
+			<Item Name="[left]">*((std::__1::__tree_node&lt;std::__1::__value_type&lt;$T1,$T2&gt;,void *&gt;**)(&amp;__left_))</Item><!-- The space between the void and the star must be there because unknown reason. -->
+			<Item Name="[right]">*((std::__1::__tree_node&lt;std::__1::__value_type&lt;$T1,$T2&gt;,void *&gt;**)(&amp;__right_))</Item><!-- The space between the void and the star must be there because unknown reason. -->
+			<Item Name="[parent]">*((std::__1::__tree_node&lt;std::__1::__value_type&lt;$T1,$T2&gt;,void *&gt;**)(&amp;__parent_))</Item><!-- The space between the void and the star must be there because unknown reason. -->
+			<Item Name="[color]" Condition="__is_black_">"black"</Item>
+			<Item Name="[color]" Condition="!__is_black_">"red"</Item>
+			<Item Name="[vale]">__value_</Item>
+		</Expand>
+	</Type>
+	<Type Name="std::__1::__map_iterator&lt;std::__1::__tree_iterator&lt;std::__1::__value_type&lt;*,*&gt;,*&gt;&gt;">
+		<!-- This will fail in case of end() iterator into empty map. It will try to show the end() iterator's content instead of displaying end. -->
+		<!-- This will fail in case of large map (more than 64k elements). It will try to show the end() iterator's content instead of displaying end. -->
+		<!-- This will fail in case of stateful allocator. -->
+		<AlternativeType Name="std::__1::__map_const_iterator&lt;std::__1::__tree_const_iterator&lt;std::__1::__value_type&lt;*,*&gt;,*&gt;&gt;"/>
+		<Intrinsic Name="is_end" Expression="((size_t*)(__i_.__ptr_))[1] &gt;= 1 &amp;&amp; ((size_t*)(__i_.__ptr_))[1] &lt;= 64 * 1024"/>
+		<DisplayString Condition="is_end()">end</DisplayString>
+		<DisplayString Condition="!is_end()">{((std::__1::__tree_node&lt;std::__1::__value_type&lt;$T1,$T2&gt;,void *&gt;*)(__i_.__ptr_))-&gt;__value_}</DisplayString><!-- The space between the void and the star must be there because unknown reason. -->
+		<Expand>
+			<Item Name="[ptr]" Condition="!is_end()">*((std::__1::__tree_node&lt;std::__1::__value_type&lt;$T1,$T2&gt;,void *&gt;**)(&amp;__i_.__ptr_))</Item><!-- The space between the void and the star must be there because unknown reason. -->
+		</Expand>
+	</Type>
+	<Type Name="std::__1::thread">
+		<DisplayString>{__t_,handle}</DisplayString>
+		<Expand>
+			<Item Name="[handle]">__t_,handle</Item>
+		</Expand>
+	</Type>
+	<Type Name="std::__1::jthread">
+		<DisplayString>{__thread_}</DisplayString>
+		<Expand>
+			<Item Name="[thread]">__thread_</Item>
+		</Expand>
+	</Type>
+	<Type Name="std::__1::__thread_id">
+		<DisplayString>{__id_}</DisplayString>
+		<Expand>
+			<Item Name="[id]">__id_</Item>
+		</Expand>
+	</Type>
+</AutoVisualizer>
