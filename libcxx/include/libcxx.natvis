@@ -123,6 +123,11 @@
 			</LinkedListItems>
 		</Expand>
 	</Type>
+	<Type Name="std::__1::__forward_begin_node&lt;std::__1::__forward_list_node&lt;*,void*&gt;*&gt;">
+		<Expand>
+			<Item Name="[root]">__next_</Item>
+		</Expand>
+	</Type>
 	<Type Name="std::__1::__forward_list_node&lt;*,void*&gt;">
 		<DisplayString>{__value_}</DisplayString>
 		<Expand>
@@ -135,6 +140,33 @@
 		<DisplayString>{((std::__1::__forward_list_node&lt;$T1,void *&gt;*)(__ptr_))-&gt;__value_}</DisplayString><!-- The space between the void and the star must be there because unknown reason. -->
 		<Expand>
 			<Item Name="[ptr]">*((std::__1::__forward_list_node&lt;$T1,void *&gt;**)(&amp;__ptr_))</Item><!-- The space between the void and the star must be there because unknown reason. -->
+		</Expand>
+	</Type>
+	<Type Name="std::__1::__tree&lt;std::__1::__value_type&lt;*,*&gt;,*,*&gt;">
+		<Intrinsic Name="is_empty" Expression="__end_node_.__left_ == nullptr"/>
+		<DisplayString Condition="is_empty()">empty</DisplayString>
+		<Expand>
+			<Item Name="[left most]" Condition="!is_empty()">*((std::__1::__tree_node&lt;std::__1::__value_type&lt;$T1,$T2&gt;,void *&gt;**)(&amp;__begin_node_))</Item><!-- The space between the void and the star must be there because unknown reason. -->
+			<Item Name="[root]" Condition="!is_empty()">*((std::__1::__tree_node&lt;std::__1::__value_type&lt;$T1,$T2&gt;,void *&gt;**)(&amp;__end_node_.__left_))</Item><!-- The space between the void and the star must be there because unknown reason. -->
+			<Item Name="[allocator]">__node_alloc_</Item>
+			<Item Name="[size]">__size_</Item>
+		</Expand>
+	</Type>
+	<Type Name="std::__1::__tree_node&lt;std::__1::__value_type&lt;*&gt;,void*&gt;">
+		<!-- This will fail in case of end iterator into empty map. It will try to show the end iterator's content instead of displaying end. -->
+		<!-- This will fail in case of large map (more than 64k elements). It will try to show the end iterator's content instead of displaying end. -->
+		<!-- This will fail in case of stateful allocator. It will read the allocator as-if it was size. -->
+		<Intrinsic Name="is_end" Expression="((size_t*)(this))[1] &gt;= 1 &amp;&amp; ((size_t*)(this))[1] &lt;= 64 * 1024"/>
+		<DisplayString Condition="is_end()">sentinel</DisplayString>
+		<DisplayString Condition="!is_end()">{__value_}</DisplayString>
+		<Expand>
+			<Item Name="[left]" Condition="!is_end()">*((std::__1::__tree_node&lt;std::__1::__value_type&lt;$T1,$T2&gt;,void *&gt;**)(&amp;__left_))</Item><!-- The space between the void and the star must be there because unknown reason. -->
+			<Item Name="[right]" Condition="!is_end()">*((std::__1::__tree_node&lt;std::__1::__value_type&lt;$T1,$T2&gt;,void *&gt;**)(&amp;__right_))</Item><!-- The space between the void and the star must be there because unknown reason. -->
+			<Item Name="[parent]" Condition="!is_end()">*((std::__1::__tree_node&lt;std::__1::__value_type&lt;$T1,$T2&gt;,void *&gt;**)(&amp;__parent_))</Item><!-- The space between the void and the star must be there because unknown reason. -->
+			<Item Name="[color]" Condition="!is_end() &amp;&amp; __is_black_">"black"</Item>
+			<Item Name="[color]" Condition="!is_end() &amp;&amp; !__is_black_">"red"</Item>
+			<Item Name="[vale]" Condition="!is_end()">__value_</Item>
+			<Item Name="[root]" Condition="is_end()">*((std::__1::__tree_node&lt;std::__1::__value_type&lt;$T1,$T2&gt;,void *&gt;**)(&amp;__left_))</Item><!-- The space between the void and the star must be there because unknown reason. -->
 		</Expand>
 	</Type>
 	<!-- todo: generalize this to general "tree" instead of concrete "map" -->
@@ -153,21 +185,10 @@
 			</TreeItems>
 		</Expand>
 	</Type>
-	<Type Name="std::__1::__tree_node&lt;std::__1::__value_type&lt;*&gt;,void*&gt;">
-		<DisplayString>{__value_}</DisplayString>
-		<Expand>
-			<Item Name="[left]">*((std::__1::__tree_node&lt;std::__1::__value_type&lt;$T1,$T2&gt;,void *&gt;**)(&amp;__left_))</Item><!-- The space between the void and the star must be there because unknown reason. -->
-			<Item Name="[right]">*((std::__1::__tree_node&lt;std::__1::__value_type&lt;$T1,$T2&gt;,void *&gt;**)(&amp;__right_))</Item><!-- The space between the void and the star must be there because unknown reason. -->
-			<Item Name="[parent]">*((std::__1::__tree_node&lt;std::__1::__value_type&lt;$T1,$T2&gt;,void *&gt;**)(&amp;__parent_))</Item><!-- The space between the void and the star must be there because unknown reason. -->
-			<Item Name="[color]" Condition="__is_black_">"black"</Item>
-			<Item Name="[color]" Condition="!__is_black_">"red"</Item>
-			<Item Name="[vale]">__value_</Item>
-		</Expand>
-	</Type>
 	<Type Name="std::__1::__map_iterator&lt;std::__1::__tree_iterator&lt;std::__1::__value_type&lt;*,*&gt;,*&gt;&gt;">
-		<!-- This will fail in case of end() iterator into empty map. It will try to show the end() iterator's content instead of displaying end. -->
-		<!-- This will fail in case of large map (more than 64k elements). It will try to show the end() iterator's content instead of displaying end. -->
-		<!-- This will fail in case of stateful allocator. -->
+		<!-- This will fail in case of end iterator into empty map. It will try to show the end iterator's content instead of displaying end. -->
+		<!-- This will fail in case of large map (more than 64k elements). It will try to show the end iterator's content instead of displaying end. -->
+		<!-- This will fail in case of stateful allocator. It will read the allocator as-if it was size. -->
 		<AlternativeType Name="std::__1::__map_const_iterator&lt;std::__1::__tree_const_iterator&lt;std::__1::__value_type&lt;*,*&gt;,*&gt;&gt;"/>
 		<Intrinsic Name="is_end" Expression="((size_t*)(__i_.__ptr_))[1] &gt;= 1 &amp;&amp; ((size_t*)(__i_.__ptr_))[1] &lt;= 64 * 1024"/>
 		<DisplayString Condition="is_end()">end</DisplayString>
